@@ -273,6 +273,13 @@ function closeCart() {
   document.body.classList.remove("cart-open");
 }
 
+function closeSearchPanel() {
+  searchPanel.classList.remove("open");
+  searchInput.value = "";
+  renderProducts();
+  document.getElementById("searchToggle").focus();
+}
+
 document.getElementById("cartToggle").addEventListener("click", openCart);
 document.getElementById("closeCart").addEventListener("click", closeCart);
 document.getElementById("continueShopping").addEventListener("click", closeCart);
@@ -281,26 +288,23 @@ overlay.addEventListener("click", closeCart);
 document.addEventListener("keydown", event => {
   if (event.key === "Escape") {
     closeCart();
-    searchPanel.classList.remove("open");
+    if (searchPanel.classList.contains("open")) {
+      closeSearchPanel();
+    }
   }
 });
 
 document.getElementById("searchToggle").addEventListener("click", () => {
-  searchPanel.classList.toggle("open");
-
   if (searchPanel.classList.contains("open")) {
-    searchInput.focus();
-  } else {
-    searchInput.value = "";
-    renderProducts();
+    closeSearchPanel();
+    return;
   }
+
+  searchPanel.classList.add("open");
+  searchInput.focus();
 });
 
-document.getElementById("closeSearch").addEventListener("click", () => {
-  searchPanel.classList.remove("open");
-  searchInput.value = "";
-  renderProducts();
-});
+document.getElementById("closeSearch").addEventListener("click", closeSearchPanel);
 
 searchInput.addEventListener("input", renderProducts);
 sortSelect.addEventListener("change", renderProducts);
